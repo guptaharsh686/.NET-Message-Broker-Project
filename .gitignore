@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Message Broker/.vs/Message Broker
+/Message Broker/Message Broker/bin/Debug/net6.0
+/Message Broker/Message Broker/obj
