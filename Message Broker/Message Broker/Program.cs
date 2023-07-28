@@ -1,4 +1,5 @@
 using Message_Broker.Data;
+using Message_Broker.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,5 +9,23 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlite("Data Source= M
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+
+// Create Topic Endpoint
+app.MapPost("api/topics", async(AppDbContext context, Topic topic) =>
+{
+    await context.Topics.AddAsync(topic);
+    await context.SaveChangesAsync();
+
+    return Results.Created($"api/topics/{topic.Id}",topic);
+});
+
+// Return all topics
+app.MapGet("api/topics", async (AppDbContext context) =>
+{
+    var topics = await context.Topics.ToListAsync();
+
+    return Results.Ok(topics);
+});
+
 
 app.Run();
