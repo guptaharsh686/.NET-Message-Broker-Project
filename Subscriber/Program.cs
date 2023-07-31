@@ -6,6 +6,29 @@
 using Subscriber.Dtos;
 using System.Net.Http.Json;
 
+
+Console.WriteLine("Press ESC to stop!!!");
+
+do
+{
+    HttpClient client = new HttpClient();
+    Console.WriteLine("Listning!!");
+
+    while (!Console.KeyAvailable)
+    {
+        List<int> ackIds = await GetMessagesAsync(client);
+
+        Thread.Sleep(2000);
+
+        if(ackIds.Count > 0)
+        {
+            await AckMessagesAsync(client, ackIds);
+        }
+
+    }
+} while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+
+
 static async Task<List<int>> GetMessagesAsync(HttpClient httpClient)
 {
     List<int> ackIds = new List<int>();
@@ -14,7 +37,7 @@ static async Task<List<int>> GetMessagesAsync(HttpClient httpClient)
 
     try
     {
-        newMessages = await httpClient.GetFromJsonAsync<List<MessageReadDto>>("http://localhost:20034/api/subscriptions/1/messages");
+        newMessages = await httpClient.GetFromJsonAsync<List<MessageReadDto>>("http://localhost:20034/api/subscriptions/2/messages");
     }
     catch
     {
